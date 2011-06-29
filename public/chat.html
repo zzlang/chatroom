@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>chat room</title>
+		<meta charset="utf-8"/>
+		<style>
+			.record{
+				width:600px;
+				height:200px;
+				border:1px solid black;
+				margin:2px;
+				padding:2px;
+			}
+			.operation{
+				width:600px;
+				height:60px;
+				border:1px solid black;
+				margin:2px;
+				padding:2px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="record" class="record"></div>
+		<div id="operation" class="operation">
+			<textarea id="content"></textarea>
+			<input type="BUTTON" id="send" value="send"/>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var hostname=location.hostname,
+			port=location.port,
+			url="ws://"+hostname+":"+port+"/",
+			ws=new WebSocket(url),
+			_=function(id){
+				return document.getElementById(id);
+			};
+		ws.onopen=function(){
+			pushData("connect successfully");
+		};
+		ws.onmessage=function(e){
+			pushData(e.data);
+		}
+		function pushData(data){
+			_("record").innerHTML+="<span>"+data+"</span><br/>";
+		};
+		
+		_("send").onclick=function(){
+			if(_("content").value!==""){
+				sendData(localStorage.getItem("username")+" says:"+_("content").value);
+			}
+		}
+		function sendData(data){
+			var tempurl="http://"+hostname+":"+port+"/chat"+"?data="+data+"&id="+new Date().getTime(),
+				xhr=createXHR();
+			xhr.open("GET",tempurl,false);
+			xhr.send();
+			if(xhr.responseText==="success"){
+				_("content").value="";
+			}
+
+		}
+		function createXHR(){
+			return new XMLHttpRequest();
+		}
+	</script>
+
+</html>	
+
+

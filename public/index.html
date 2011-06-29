@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>register</title>
+	</head>
+	<body>
+		<form action="/reg" method="POST" id="form1">
+		<input type="TEXT" id="username" name="username"/>
+		<input type="BUTTON" value="submit" id="btSubmit"/>
+	</form>
+	<script type="TEXT/javascript">
+		var _=function(id){return document.getElementById(id)};
+		_("btSubmit").onclick=function(){
+			if(_("username").value===""){
+				alert("Please enter your username");
+				return false;
+			};
+			localStorage.setItem("username",_("username").value)
+			_("form1").submit();
+		}
+	</script>
+	</body>	
+</html>
